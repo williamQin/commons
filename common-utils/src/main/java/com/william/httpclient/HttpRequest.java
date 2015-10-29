@@ -1,5 +1,6 @@
 package com.william.httpclient;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -128,6 +129,19 @@ public class HttpRequest {
 	public void setFileName(String fileName) {
 	
 		this.fileName = fileName;
+	}
+	
+	/**
+	 * @param key …¢”µÃû
+	 * @param value …¢”µÖµ
+	 * @return
+	 */
+	public HttpRequest setRequestParam(String key, String value){
+		if(this.parametersMap == null){
+			this.parametersMap = new HashMap<String, String>();
+		}
+		this.parametersMap.put(key, value);
+		return this;
 	}
 	
 }

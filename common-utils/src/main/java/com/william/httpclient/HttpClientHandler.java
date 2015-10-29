@@ -1,7 +1,9 @@
 package com.william.httpclient;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -77,7 +79,7 @@ public class HttpClientHandler {
 	}
 
 	/**
-	 * @Title: post
+	 * @Title: doPost
 	 * @Description: TODO(使用post方式请求数据)
 	 * @param @param request
 	 * @param @return
@@ -89,7 +91,7 @@ public class HttpClientHandler {
 	 * @throws
 	 * @date 2015-10-21 下午4:06:52
 	 */
-	public HttpResponse post(HttpRequest request) throws ParseException, UnsupportedEncodingException, IOException, URISyntaxException {
+	public HttpResponse doPost(HttpRequest request) throws ParseException, UnsupportedEncodingException, IOException, URISyntaxException {
 		HttpResponse response = null;
 		// 获取http连接
 		HttpClient httpclient = HttpClients.createMinimal(clientConnectionManager);
@@ -114,7 +116,7 @@ public class HttpClientHandler {
 	}
 
 	/**
-	 * @Title: get
+	 * @Title: doGet
 	 * @Description: TODO(使用get方式请求数据)
 	 * @param @param request
 	 * @param @return
@@ -125,7 +127,7 @@ public class HttpClientHandler {
 	 * @throws
 	 * @date 2015-10-21 下午4:07:18
 	 */
-	public HttpResponse get(HttpRequest request) throws ParseException, IOException, URISyntaxException {
+	public HttpResponse doGet(HttpRequest request) throws ParseException, IOException, URISyntaxException {
 		HttpResponse response = null;
 		// 获取http连接
 		HttpClient httpclient = HttpClients.createMinimal(clientConnectionManager);
@@ -193,8 +195,46 @@ public class HttpClientHandler {
 		return response;
 	}
 
-	public HttpResponse download() {
-		return null;
+	/**
+	 * @Title: download 
+	 * @Description: TODO(这里用一句话描述这个方法的作用) 
+	 * @param request
+	 * @return 设定文件 
+	 * @throws IOException 
+	 * @throws ClientProtocolException 
+	 * @throws 
+	 * @date 2015-10-29 下午2:41:39
+	 */
+	public HttpResponse download(HttpRequest request) throws ClientProtocolException, IOException {
+		HttpResponse response = null;
+		// 获取http连接
+		HttpClient httpclient = HttpClients.createMinimal(clientConnectionManager);
+		// 请求体配置项
+		RequestConfig requestConfig = getRequestConfig(request);
+		String charset = request.getCharset();
+		charset = charset == null ? DEFAULT_CHARSET : charset;
+		HttpGet httpGet = new HttpGet(request.getUrl());
+		httpGet.setConfig(requestConfig);
+		org.apache.http.HttpResponse httpResponse = httpclient.execute(httpGet);
+		if(httpResponse != null){
+			response = new HttpResponse();
+			response.setHeaders(httpResponse.getAllHeaders());
+			response.setStatusLine(httpResponse.getStatusLine());
+			InputStream in = httpResponse.getEntity().getContent();
+			try{
+				File file = new File(request.getFilePath() + request.getFileName());
+				FileOutputStream outputStream = new FileOutputStream(file);
+				byte[] temp = new byte[1024];
+				while(in.read(temp) != -1){
+					outputStream.write(temp, 0, 1);
+				}
+				outputStream.flush();
+				outputStream.close();
+			}finally{
+				in.close();
+			}
+		}
+		return response;
 	}
 
 	private List<NameValuePair> requestParamsHandler(Map<String, String> parametersMap) {
