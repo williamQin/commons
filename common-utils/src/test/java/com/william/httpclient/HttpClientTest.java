@@ -32,8 +32,8 @@ public class HttpClientTest {
 		request.setUrl("http://localhost:888/upload");
 		request.setFileName("test");
 		request.setFilePath("C:\\Users\\Administrator\\Desktop\\test.txt");
-		HttpResponse response = HttpClientHandler.getInstance().upload(request);
-		System.out.println(response.getResultStr());
+		//HttpResponse response = HttpClientHandler.getInstance().upload(request);
+		//System.out.println(response.getResultStr());
 	}
 	
 	@Test

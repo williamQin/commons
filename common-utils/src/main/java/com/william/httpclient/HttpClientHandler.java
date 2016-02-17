@@ -7,7 +7,6 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -23,10 +22,6 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.conn.routing.HttpRoute;
-import org.apache.http.entity.ContentType;
-import org.apache.http.entity.mime.HttpMultipartMode;
-import org.apache.http.entity.mime.MultipartEntityBuilder;
-import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.message.BasicNameValuePair;
@@ -163,37 +158,37 @@ public class HttpClientHandler {
 	 * @throws 
 	 * @date 2015-10-21 下午4:52:05
 	 */
-	public HttpResponse upload(HttpRequest request) throws ClientProtocolException, IOException {
-		HttpResponse response = null;
-		// 获取http连接
-		HttpClient httpclient = HttpClients.createMinimal(clientConnectionManager);
-		// 请求体配置项
-		RequestConfig requestConfig = getRequestConfig(request);
-		String charset = request.getCharset();
-		charset = charset == null ? DEFAULT_CHARSET : charset;
-		MultipartEntityBuilder builder = MultipartEntityBuilder.create().setCharset(Charset.forName(charset)).setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
-		builder.addPart("file", new FileBody(new File(request.getFilePath()), ContentType.MULTIPART_FORM_DATA, request.getFileName()));
-		if(request.getParametersMap() != null){
-			Iterator<String> iterator = request.getParametersMap().keySet().iterator();
-			while(iterator.hasNext()){
-				String key = iterator.next();
-				builder.addTextBody(key, request.getParametersMap().get(key));
-			}
-		}
-		HttpPost httpPost = new HttpPost(request.getUrl());
-		httpPost.setConfig(requestConfig);
-		httpPost.setEntity(builder.build());
-		org.apache.http.HttpResponse httpResponse = httpclient.execute(httpPost);
-		if (httpResponse != null) {
-			response = new HttpResponse();
-			response.setHeaders(httpResponse.getAllHeaders());
-			response.setStatusLine(httpResponse.getStatusLine());
-			if (httpResponse.getEntity() != null) {
-				response.setResultStr(EntityUtils.toString(httpResponse.getEntity(), charset));
-			}
-		}
-		return response;
-	}
+//	public HttpResponse upload(HttpRequest request) throws ClientProtocolException, IOException {
+//		HttpResponse response = null;
+//		// 获取http连接
+//		HttpClient httpclient = HttpClients.createMinimal(clientConnectionManager);
+//		// 请求体配置项
+//		RequestConfig requestConfig = getRequestConfig(request);
+//		String charset = request.getCharset();
+//		charset = charset == null ? DEFAULT_CHARSET : charset;
+//		MultipartEntityBuilder builder = MultipartEntityBuilder.create().setCharset(Charset.forName(charset)).setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+//		builder.addPart("file", new FileBody(new File(request.getFilePath()), ContentType.MULTIPART_FORM_DATA, request.getFileName()));
+//		if(request.getParametersMap() != null){
+//			Iterator<String> iterator = request.getParametersMap().keySet().iterator();
+//			while(iterator.hasNext()){
+//				String key = iterator.next();
+//				builder.addTextBody(key, request.getParametersMap().get(key));
+//			}
+//		}
+//		HttpPost httpPost = new HttpPost(request.getUrl());
+//		httpPost.setConfig(requestConfig);
+//		httpPost.setEntity(builder.build());
+//		org.apache.http.HttpResponse httpResponse = httpclient.execute(httpPost);
+//		if (httpResponse != null) {
+//			response = new HttpResponse();
+//			response.setHeaders(httpResponse.getAllHeaders());
+//			response.setStatusLine(httpResponse.getStatusLine());
+//			if (httpResponse.getEntity() != null) {
+//				response.setResultStr(EntityUtils.toString(httpResponse.getEntity(), charset));
+//			}
+//		}
+//		return response;
+//	}
 
 	/**
 	 * @Title: download 
