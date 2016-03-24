@@ -1,5 +1,6 @@
 package com.william.httpclient;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import org.apache.http.ParseException;
@@ -28,21 +29,27 @@ public class HttpClientTest {
 	
 	@Test
 	public void testUpload() throws ClientProtocolException, IOException{
-		HttpRequest request = new HttpRequest();
-		request.setUrl("http://localhost:888/upload");
-		request.setFileName("test");
-		request.setFilePath("C:\\Users\\Administrator\\Desktop\\test.txt");
-		//HttpResponse response = HttpClientHandler.getInstance().upload(request);
-		//System.out.println(response.getResultStr());
+		UploadRequest request = new UploadRequest();
+		request.setUrl("http://localhost:8089/user/upload");
+		request.addFile("C:\\Users\\Administrator/Desktop/webapp");
+		HttpResponse response = HttpClientHandler.getInstance().upload(request);
+		System.out.println(response.getResultStr());
 	}
 	
 	@Test
 	public void testDownLoad() throws ClientProtocolException, IOException{
-		HttpRequest request = new HttpRequest();
-		request.setUrl("http://localhost:888/download");
-		request.setFileName("test.txt");
-		request.setFilePath("C:\\Users\\Administrator\\Desktop\\download\\");
-		HttpClientHandler.getInstance().download(request);
+		DownLoadRequest request = new DownLoadRequest();
+		request.setUrl("http://localhost:8089/user/download");
+		request.setFileName("download.json");;
+		request.setFilePath("C:\\Users\\Administrator/Desktop/upload/");
+		HttpResponse response = HttpClientHandler.getInstance().download(request);
+		System.out.println(response.getResultStr());
+	}
+	
+	@Test
+	public void test(){
+		File file = new File("C:\\Users\\Administrator/Desktop\\upload/jquery-migrate-1.2.1.js");
+		System.out.println(file.getName());
 	}
 
 }

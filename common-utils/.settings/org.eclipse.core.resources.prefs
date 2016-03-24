@@ -1,4 +1,7 @@
 eclipse.preferences.version=1
+encoding//src/main/java=UTF-8
 encoding//src/main/java/com/william/encrypt/DESUtil.java=UTF-8
-encoding//src/main/java/com/william/file/FileUtil.java=UTF-8
 encoding//src/main/java/com/william/http/HttpUtil.java=UTF-8
+encoding//src/main/java/com/william/io/FileUtil.java=UTF-8
+encoding//src/test/java=UTF-8
+encoding/<project>=UTF-8

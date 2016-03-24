@@ -4,136 +4,108 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Date:     2015-10-19 ÉÏÎç10:07:10<br/>
  * @author   [William.Qin]
  * @version  2.0
  * @since    JDK 1.6
  */
 public class HttpRequest {
 	
+	/*
+	 * è¿æ¥è¶…æ—¶æ—¶é—´
+	 */
+	private int connectionTimeout = 60000;
+	
+	/*
+	 * è¯·æ±‚è¶…æ—¶æ—¶é—´
+	 */
+	private int requestTimeout = 30000;
+	
 	/**
-	 * Ä¬ÈÏµÄÇëÇó±àÂë·½Ê½("UTF-8")
+	 * é»˜è®¤å­—ç¬¦é›†("UTF-8")
 	 */
 	private String charset = "UTF-8";
 	
 	/**
-	 * ·ÃÎÊ³¬Ê±Ê±¼ä
-	 */
-	private int timeout = 0;
-	
-	/**
-	 * Á¬½Ó³¬Ê±Ê±¼ä
-	 */
-	private int connectTimeout = 0;
-	
-	/**
-	 * ´ıÇëÇóµÄURL
+	 * è¯·æ±‚çš„urlåœ°å€
 	 */
 	private String url = null;
 	
 	/**
-	 * ÇëÇóµÄÎÄ±¾²ÎÊı
+	 * è¯·æ±‚å‚æ•°
 	 */
 	private Map<String, String> parametersMap = null;
 	
-	/**
-	 * ÉÏ´«»òÏÂÔØµÄÎÄ¼şÂ·¾¶
-	 */
-	private String filePath;
-	
-	/**
-	 * ÉÏ´«»òÏÂÔØÎÄ¼şµÄÎÄ¼şÃû
-	 */
-	private String fileName;
-	
-	/**
-	 * ÇëÇó·¢Æğ·½µÄIpµØÖ·
-	 */
 	private String clientIp;
-
-	public String getUrl() {
 	
-		return url;
+	public HttpRequest(){
 	}
-
-	public void setUrl(String url) {
 	
+	public HttpRequest(String url){
 		this.url = url;
 	}
-
-	public int getTimeout() {
 	
-		return timeout;
-	}
-
-	public void setTimeout(int timeout) {
-	
-		this.timeout = timeout;
-	}
-
-	public int getConnectTimeout() {
-	
-		return connectTimeout;
-	}
-
-	public void setConnectTimeout(int connectTimeout) {
-	
-		this.connectTimeout = connectTimeout;
-	}
-
-	public Map<String, String> getParametersMap() {
-	
-		return parametersMap;
-	}
-
-	public void setParametersMap(Map<String, String> parametersMap) {
-	
+	public HttpRequest(String url, Map<String, String> parametersMap){
+		this.url = url;
 		this.parametersMap = parametersMap;
+	}
+	
+	public HttpRequest(String charset, String url, Map<String, String> parametersMap){
+		this.charset = charset;
+		this.url = url;
+		this.parametersMap = parametersMap;
+	}
+	
+	public int getConnectionTimeout() {
+		return connectionTimeout;
+	}
+
+	public void setConnectionTimeout(int connectionTimeout) {
+		this.connectionTimeout = connectionTimeout;
+	}
+
+	public int getRequestTimeout() {
+		return requestTimeout;
+	}
+
+	public void setRequestTimeout(int requestTimeout) {
+		this.requestTimeout = requestTimeout;
 	}
 
 	public String getCharset() {
-	
 		return charset;
 	}
 
 	public void setCharset(String charset) {
-	
 		this.charset = charset;
 	}
 
-	public String getClientIp() {
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
+	}
+
+	public Map<String, String> getParametersMap() {
+		return parametersMap;
+	}
+
+	public void setParametersMap(Map<String, String> parametersMap) {
+		this.parametersMap = parametersMap;
+	}
 	
+	public String getClientIp() {
 		return clientIp;
 	}
 
 	public void setClientIp(String clientIp) {
-	
 		this.clientIp = clientIp;
 	}
 
-	public String getFilePath() {
-	
-		return filePath;
-	}
-
-	public void setFilePath(String filePath) {
-	
-		this.filePath = filePath;
-	}
-
-	public String getFileName() {
-	
-		return fileName;
-	}
-
-	public void setFileName(String fileName) {
-	
-		this.fileName = fileName;
-	}
-	
 	/**
-	 * @param key …¢”µÃû
-	 * @param value …¢”µÖµ
+	 * @param key å‚æ•°å
+	 * @param value å‚æ•°å€¼
 	 * @return
 	 */
 	public HttpRequest setRequestParam(String key, String value){
@@ -143,5 +115,4 @@ public class HttpRequest {
 		this.parametersMap.put(key, value);
 		return this;
 	}
-	
 }

@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -22,75 +23,95 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.conn.routing.HttpRoute;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.mime.HttpMultipartMode;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
 /**
- * Date: 2015-10-20 ÉÏÎç9:35:47<br/>
  * 
  * @author [William.Qin]
  * @version 2.0
  * @since JDK 1.6
  */
 public class HttpClientHandler {
+	
 	private static String DEFAULT_CHARSET = "UTF-8";
+	
+	//è¿æ¥è¶…æ—¶æ—¶é—´
+	private int defaultConnectionTimeout = 60000;
 
-	/** Á¬½Ó³¬Ê±Ê±¼ä£¬ÓÉbean factoryÉèÖÃ£¬È±Ê¡Îª8ÃëÖÓ */
-	private int defaultConnectionTimeout = 8000;
-
-	/** ÏìÓ¦³¬Ê±Ê±¼ä, ÓÉbean factoryÉèÖÃ£¬È±Ê¡Îª30ÃëÖÓ */
-	private int defaultSoTimeout = 30000;
+	//è¯·æ±‚è¶…æ—¶æ—¶é—´
+	private int defaultRequestTimeout = 30000;
 
 	private int defaultMaxConnPerHost = 30;
 
 	private int defaultMaxTotalConn = 200;
-
+	
 	private PoolingHttpClientConnectionManager clientConnectionManager = new PoolingHttpClientConnectionManager();
 
-	private static HttpClientHandler httpClientHandler = new HttpClientHandler();
+	private static HttpClientHandler httpClientHandler;
 
-	/**
-	 * µ¥ÀıÄ£Ê½
-	 * 
-	 * @return
-	 */
+	//Get the instance by default config
 	public static HttpClientHandler getInstance() {
+		if(httpClientHandler == null)
+			httpClientHandler = new HttpClientHandler();
 		return httpClientHandler;
 	}
-
-	/**
-	 * Ë½ÓĞµÄ¹¹Ôì·½·¨(³õÊ¼»¯Á¬½Ó¹ÜÀíÆ÷)
-	 */
+	//Get the instance by config
+	public static HttpClientHandler getInstance(Integer defaultMaxConnPerHost, Integer defaultMaxTotalConn) {
+		if(httpClientHandler == null){
+			httpClientHandler = new HttpClientHandler(defaultMaxConnPerHost, defaultMaxTotalConn);
+		}
+		return httpClientHandler;
+	}
+	
 	private HttpClientHandler() {
-		// Increase max total connection to 200
+		this.setConnectionManager();
+	}
+	
+	private HttpClientHandler(Integer defaultMaxConnPerHost, Integer defaultMaxTotalConn){
+		if(defaultMaxConnPerHost != null)
+			this.defaultMaxConnPerHost = defaultMaxConnPerHost;
+		if(defaultMaxTotalConn != null)
+			this.defaultMaxTotalConn = defaultMaxTotalConn;
+		this.setConnectionManager();
+	}
+	
+	/**
+	 * è®¾ç½®httpclientçš„å¹¶å‘è¿æ¥æ•°
+	 */
+	private void setConnectionManager() {
+		// Set the max total connections
 		clientConnectionManager.setMaxTotal(defaultMaxTotalConn);
-		// Increase default max connection per route to 30
+		// Set default max connection per route
 		clientConnectionManager.setDefaultMaxPerRoute(defaultMaxConnPerHost);
-		// Increase max connections for localhost:80 to 50
+		// Set max connections for localhost:80 to 50
 		HttpHost localhost = new HttpHost("locahost", 80);
 		clientConnectionManager.setMaxPerRoute(new HttpRoute(localhost), 50);
 	}
 
 	/**
 	 * @Title: doPost
-	 * @Description: TODO(Ê¹ÓÃpost·½Ê½ÇëÇóÊı¾İ)
+	 * @Description: TODO(ä½¿ç”¨httpclientå‘èµ·ç®€å•çš„postè¯·æ±‚)
 	 * @param @param request
 	 * @param @return
 	 * @param @throws ParseException
 	 * @param @throws UnsupportedEncodingException
 	 * @param @throws IOException
-	 * @param @throws URISyntaxException Éè¶¨ÎÄ¼ş
-	 * @return HttpResponse ·µ»ØÀàĞÍ
+	 * @param @throws URISyntaxException
+	 * @return HttpResponse
 	 * @throws
-	 * @date 2015-10-21 ÏÂÎç4:06:52
 	 */
 	public HttpResponse doPost(HttpRequest request) throws ParseException, UnsupportedEncodingException, IOException, URISyntaxException {
 		HttpResponse response = null;
-		// »ñÈ¡httpÁ¬½Ó
+		
 		HttpClient httpclient = HttpClients.createMinimal(clientConnectionManager);
-		// ÇëÇóÌåÅäÖÃÏî
+		
 		RequestConfig requestConfig = getRequestConfig(request);
 		String charset = request.getCharset();
 		charset = charset == null ? DEFAULT_CHARSET : charset;
@@ -112,21 +133,19 @@ public class HttpClientHandler {
 
 	/**
 	 * @Title: doGet
-	 * @Description: TODO(Ê¹ÓÃget·½Ê½ÇëÇóÊı¾İ)
+	 * @Description: TODO(ä½¿ç”¨httpclientå‘èµ·ç®€å•çš„getè¯·æ±‚)
 	 * @param @param request
 	 * @param @return
 	 * @param @throws ParseException
 	 * @param @throws IOException
-	 * @param @throws URISyntaxException Éè¶¨ÎÄ¼ş
-	 * @return HttpResponse ·µ»ØÀàĞÍ
+	 * @param @throws URISyntaxException
+	 * @return HttpResponse
 	 * @throws
-	 * @date 2015-10-21 ÏÂÎç4:07:18
 	 */
 	public HttpResponse doGet(HttpRequest request) throws ParseException, IOException, URISyntaxException {
 		HttpResponse response = null;
-		// »ñÈ¡httpÁ¬½Ó
 		HttpClient httpclient = HttpClients.createMinimal(clientConnectionManager);
-		// ÇëÇóÌåÅäÖÃÏî
+		
 		RequestConfig requestConfig = getRequestConfig(request);
 		String charset = request.getCharset();
 		charset = charset == null ? DEFAULT_CHARSET : charset;
@@ -149,62 +168,65 @@ public class HttpClientHandler {
 
 	/**
 	 * @Title: upload 
-	 * @Description: TODO(Ê¹ÓÃpost·½Ê½ÉÏ´«ÎÄ¼ş) 
+	 * @Description: TODO(ä½¿ç”¨httpClientä¸Šä¼ æ–‡ä»¶) 
 	 * @param @param request
 	 * @param @return
 	 * @param @throws ClientProtocolException
-	 * @param @throws IOException Éè¶¨ÎÄ¼ş 
-	 * @return HttpResponse ·µ»ØÀàĞÍ 
+	 * @param @throws IOException
+	 * @return HttpResponse
 	 * @throws 
-	 * @date 2015-10-21 ÏÂÎç4:52:05
 	 */
-//	public HttpResponse upload(HttpRequest request) throws ClientProtocolException, IOException {
-//		HttpResponse response = null;
-//		// »ñÈ¡httpÁ¬½Ó
-//		HttpClient httpclient = HttpClients.createMinimal(clientConnectionManager);
-//		// ÇëÇóÌåÅäÖÃÏî
-//		RequestConfig requestConfig = getRequestConfig(request);
-//		String charset = request.getCharset();
-//		charset = charset == null ? DEFAULT_CHARSET : charset;
-//		MultipartEntityBuilder builder = MultipartEntityBuilder.create().setCharset(Charset.forName(charset)).setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
-//		builder.addPart("file", new FileBody(new File(request.getFilePath()), ContentType.MULTIPART_FORM_DATA, request.getFileName()));
-//		if(request.getParametersMap() != null){
-//			Iterator<String> iterator = request.getParametersMap().keySet().iterator();
-//			while(iterator.hasNext()){
-//				String key = iterator.next();
-//				builder.addTextBody(key, request.getParametersMap().get(key));
-//			}
-//		}
-//		HttpPost httpPost = new HttpPost(request.getUrl());
-//		httpPost.setConfig(requestConfig);
-//		httpPost.setEntity(builder.build());
-//		org.apache.http.HttpResponse httpResponse = httpclient.execute(httpPost);
-//		if (httpResponse != null) {
-//			response = new HttpResponse();
-//			response.setHeaders(httpResponse.getAllHeaders());
-//			response.setStatusLine(httpResponse.getStatusLine());
-//			if (httpResponse.getEntity() != null) {
-//				response.setResultStr(EntityUtils.toString(httpResponse.getEntity(), charset));
-//			}
-//		}
-//		return response;
-//	}
+	public HttpResponse upload(UploadRequest request) throws ClientProtocolException, IOException {
+		HttpResponse response = null;
+		HttpClient httpclient = HttpClients.createMinimal(clientConnectionManager);
+		
+		RequestConfig requestConfig = getRequestConfig(request);
+		String charset = request.getCharset();
+		charset = charset == null ? DEFAULT_CHARSET : charset;
+		MultipartEntityBuilder builder = MultipartEntityBuilder.create()
+				.setCharset(Charset.forName(charset))//è®¾ç½®å­—ç¬¦é›†
+				.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);//è®¾ç½®æµè§ˆå™¨å…¼å®¹æ¨¡å¼
+		List<File> fileList = request.getFileList();
+		if(fileList != null && fileList.size() > 0){
+			for(File file : fileList){
+				String fileName = file.getName();
+				builder.addPart(fileName, new FileBody(file, ContentType.MULTIPART_FORM_DATA, fileName));
+			}
+		}
+		if(request.getParametersMap() != null){
+			Iterator<String> iterator = request.getParametersMap().keySet().iterator();
+			while(iterator.hasNext()){
+				String key = iterator.next();
+				builder.addTextBody(key, request.getParametersMap().get(key));
+			}
+		}
+		HttpPost httpPost = new HttpPost(request.getUrl());
+		httpPost.setConfig(requestConfig);
+		httpPost.setEntity(builder.build());
+		org.apache.http.HttpResponse httpResponse = httpclient.execute(httpPost);
+		if (httpResponse != null) {
+			response = new HttpResponse();
+			response.setHeaders(httpResponse.getAllHeaders());
+			response.setStatusLine(httpResponse.getStatusLine());
+			if (httpResponse.getEntity() != null) {
+				response.setResultStr(EntityUtils.toString(httpResponse.getEntity(), charset));
+			}
+		}
+		return response;
+	}
 
 	/**
 	 * @Title: download 
-	 * @Description: TODO(ÕâÀïÓÃÒ»¾ä»°ÃèÊöÕâ¸ö·½·¨µÄ×÷ÓÃ) 
+	 * @Description: TODO(ä½¿ç”¨httpClientä¸‹è½½æ–‡ä»¶) 
 	 * @param request
-	 * @return Éè¶¨ÎÄ¼ş 
+	 * @return 
 	 * @throws IOException 
 	 * @throws ClientProtocolException 
 	 * @throws 
-	 * @date 2015-10-29 ÏÂÎç2:41:39
 	 */
-	public HttpResponse download(HttpRequest request) throws ClientProtocolException, IOException {
+	public HttpResponse download(DownLoadRequest request) throws ClientProtocolException, IOException {
 		HttpResponse response = null;
-		// »ñÈ¡httpÁ¬½Ó
 		HttpClient httpclient = HttpClients.createMinimal(clientConnectionManager);
-		// ÇëÇóÌåÅäÖÃÏî
 		RequestConfig requestConfig = getRequestConfig(request);
 		String charset = request.getCharset();
 		charset = charset == null ? DEFAULT_CHARSET : charset;
@@ -219,11 +241,11 @@ public class HttpClientHandler {
 			try{
 				File file = new File(request.getFilePath() + request.getFileName());
 				FileOutputStream outputStream = new FileOutputStream(file);
-				byte[] temp = new byte[1024];
-				while(in.read(temp) != -1){
-					outputStream.write(temp, 0, 1);
+				byte[] buffer = new byte[2048];
+				int bufferRead = 0;
+				while((bufferRead = in.read(buffer, 0, buffer.length)) != -1){
+					outputStream.write(buffer, 0, bufferRead);
 				}
-				outputStream.flush();
 				outputStream.close();
 			}finally{
 				in.close();
@@ -231,7 +253,7 @@ public class HttpClientHandler {
 		}
 		return response;
 	}
-
+	
 	private List<NameValuePair> requestParamsHandler(Map<String, String> parametersMap) {
 		List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>();
 		if (parametersMap != null) {
@@ -245,18 +267,18 @@ public class HttpClientHandler {
 	}
 
 	private RequestConfig getRequestConfig(HttpRequest request) {
-		// ÉèÖÃÁ¬½Ó³¬Ê±
+		// è¿æ¥è¶…æ—¶æ—¶é—´
 		int connectionTimeout = defaultConnectionTimeout;
-		if (request.getConnectTimeout() > 0) {
-			connectionTimeout = request.getConnectTimeout();
+		if (request.getConnectionTimeout() > 0) {
+			connectionTimeout = request.getConnectionTimeout();
 		}
-		// ÉèÖÃÏìÓ¦³¬Ê±
-		int soTimeout = defaultSoTimeout;
-		if (request.getTimeout() > 0) {
-			soTimeout = request.getTimeout();
+		// è¯·æ±‚è¶…æ—¶æ—¶é—´
+		int requestTimeout = defaultRequestTimeout;
+		if (request.getRequestTimeout() > 0) {
+			requestTimeout = request.getRequestTimeout();
 		}
 		// set Timeout
-		return RequestConfig.custom().setConnectionRequestTimeout(soTimeout).setConnectTimeout(connectionTimeout).build();
+		return RequestConfig.custom().setConnectionRequestTimeout(requestTimeout).setConnectTimeout(connectionTimeout).build();
 	}
 
 }

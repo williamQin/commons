@@ -15,13 +15,10 @@ import java.net.URL;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.william.file.FileUtil;
+import com.william.io.FileUtil;
 
 /**
  * @DateTime 2015年1月7日 下午4:51:03
- * @Company 华视传媒
- * @Author 刘兴密
- * @QQ 63972012
  * @Desc http 模拟请求工具类
  */
 public class HttpUtil {
@@ -33,9 +30,6 @@ public class HttpUtil {
 	public final static String CT_TYPE_HTML = "text/html";
 
 	/**
-	 * @DateTime 2015年1月7日 下午4:52:30
-	 * @Author 刘兴密
-	 * @QQ 63972012
 	 * @Desc post请求
 	 * @param requestUrl
 	 * @param data
@@ -56,11 +50,9 @@ public class HttpUtil {
 		httpconn.setDoOutput(true);
 		httpconn.setRequestProperty("Accept", "text/plain, */*");
 		// httpconn.setRequestProperty("Accept-Encoding", "gzip,deflate");
-		httpconn.setRequestProperty("Content-Type", contentType
-				+ "; charset=UTF-8");
+		httpconn.setRequestProperty("Content-Type", contentType + "; charset=UTF-8");
 		// post
-		OutputStreamWriter out = new OutputStreamWriter(
-				httpconn.getOutputStream(), "UTF-8"); // utf-8编码
+		OutputStreamWriter out = new OutputStreamWriter(httpconn.getOutputStream(), "UTF-8"); // utf-8编码
 		out.append(data);
 		out.flush();
 		out.close();
@@ -78,8 +70,6 @@ public class HttpUtil {
 
 	/**
 	 * @DateTime 2015年1月7日 下午4:53:31
-	 * @Author 刘兴密
-	 * @QQ 63972012
 	 * @Desc http get 模拟请求
 	 * @param requestUrl
 	 * @param timeout
@@ -117,8 +107,6 @@ public class HttpUtil {
 
 	/**
 	 * @DateTime 2015年1月7日 下午4:54:02
-	 * @Author 刘兴密
-	 * @QQ 63972012
 	 * @Desc http文件上传模拟请求
 	 * @param urlStr
 	 * @param fileName

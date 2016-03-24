@@ -1,4 +1,4 @@
-package com.william.file;
+package com.william.io;
 
 
 import java.io.BufferedInputStream;
@@ -10,7 +10,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,20 +26,17 @@ import com.ice.tar.TarInputStream;
  * @DateTime 2015年1月6日 下午5:13:42
  * @Desc 文件处理类
  */
-public class FileUtil {
+public class FileUtil extends FileUtils{
 
 	private static Logger logger = LoggerFactory.getLogger(FileUtil.class);
 
 	/**
-	 * @DateTime 2015年1月6日 下午5:13:54
-	 * @Author 刘兴密
-	 * @QQ 63972012
 	 * @Desc 获取文件后缀名
 	 * @param fileName
 	 * @return String
 	 */
 	public static String getFileNameSuffix(String fileName) {
-
+		
 		if (fileName.indexOf(".") == -1) {
 			return "";
 		}
@@ -46,9 +46,6 @@ public class FileUtil {
 	}
 
 	/**
-	 * @DateTime 2015年4月24日 上午11:17:32
-	 * @Author 刘兴密
-	 * @QQ 63972012
 	 * @Desc 写文件
 	 * @param in
 	 *            输入流
@@ -96,9 +93,6 @@ public class FileUtil {
 	}
 
 	/**
-	 * @DateTime 2015年4月24日 上午11:17:32
-	 * @Author 刘兴密
-	 * @QQ 63972012
 	 * @Desc 写文件
 	 * @param in
 	 *            输入流
@@ -161,8 +155,7 @@ public class FileUtil {
 				// tempFile.createNewFile();
 				createFile(tempFile.getAbsolutePath());
 				outputstream = new FileOutputStream(tempFile);
-				// 定一个缓存池 可以根据实际情况调整大小（事实证
-				// 明很有用）
+				// 定一个缓存池 可以根据实际情况调整大小（事实证明很有用）
 				byte[] buffer = new byte[1024 * 50];
 				while (true) {
 					int readsize = zis.read(buffer);
@@ -191,9 +184,6 @@ public class FileUtil {
 	}
 
 	/**
-	 * @DateTime 2015年4月24日 下午6:36:38
-	 * @Author 刘兴密
-	 * @QQ 63972012
 	 * @Desc 创建文件
 	 * @param filePath
 	 *            void
@@ -241,9 +231,6 @@ public class FileUtil {
 	}
 
 	/**
-	 * @DateTime 2015年5月20日 下午2:08:47
-	 * @Author 刘兴密
-	 * @QQ 63972012
 	 * @Desc 删除某个文件夹下所有文件
 	 * @param filePath
 	 * @return
@@ -277,9 +264,6 @@ public class FileUtil {
 	}
 	
 	/**
-	 * @DateTime 2015年7月10日 上午11:10:02
-	 * @Author 刘兴密
-	 * @QQ 63972012
 	 * @Desc 创建文件夹 
 	 * @param path
 	 * void
@@ -297,9 +281,6 @@ public class FileUtil {
     }
     
     /**
-     * @DateTime 2015年7月20日 下午2:10:33
-     * @Author 刘兴密
-     * @QQ 63972012
      * @Desc 将字符串写入文件
      * @param data
      * @param outFilePath
@@ -332,10 +313,7 @@ public class FileUtil {
 	}
 	
 	/**
-	 * @DateTime 2015年7月23日 下午5:51:44
-	 * @Author 刘兴密
-	 * @QQ 63972012
-	 * @Desc 获取文件MD5
+	 * @Desc 获取文件MD5(可以校验文件传输的完整性)
 	 * @param filePath
 	 * @return
 	 * @throws Exception
@@ -346,6 +324,30 @@ public class FileUtil {
         String md5 = DigestUtils.md5DigestAsHex(IOUtils.toByteArray(fis));    
         IOUtils.closeQuietly(fis);
         return md5;
+	}
+	
+	/**
+	 * @Desc 获取目标文件夹中所有的文件
+	 * @param file
+	 * @return
+	 */
+	public static List<File> getFiles(File file){
+		if(!file.exists())
+			return new ArrayList<File>();
+		List<File> files = new ArrayList<File>();
+		if(file.isFile()){
+			files.add(file);
+		}else if(file.isDirectory()){
+			File[] listFiles = file.listFiles();
+			if(listFiles != null){
+				for(File temp : listFiles){
+					files.addAll(getFiles(temp));
+				}
+			}
+		}else{
+			return new ArrayList<File>();
+		}
+		return files;
 	}
 
 }
