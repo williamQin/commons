@@ -14,7 +14,7 @@ public class HttpClientTest {
 		HttpRequest request = new HttpRequest();
 		request.setUrl("http://localhost:888/test/");
 		request.setRequestParam("param1", "william").setRequestParam("param2", "qinxi");
-		HttpResponse response = HttpClientHandler.getInstance().doGet(request);
+		HttpResponse response = HttpClientHelper.getInstance().doGet(request);
 		System.out.println(response.getResultStr());
 	}
 	
@@ -23,7 +23,7 @@ public class HttpClientTest {
 		HttpRequest request = new HttpRequest();
 		request.setUrl("http://localhost:888/test/");
 		request.setRequestParam("param1", "william").setRequestParam("param2", "qinxi");
-		HttpResponse response = HttpClientHandler.getInstance().doPost(request);
+		HttpResponse response = HttpClientHelper.getInstance().doPost(request);
 		System.out.println(response.getResultStr());
 	}
 	
@@ -32,7 +32,7 @@ public class HttpClientTest {
 		UploadRequest request = new UploadRequest();
 		request.setUrl("http://localhost:8089/user/upload");
 		request.addFile("C:\\Users\\Administrator/Desktop/webapp");
-		HttpResponse response = HttpClientHandler.getInstance().upload(request);
+		HttpResponse response = HttpClientHelper.getInstance().upload(request);
 		System.out.println(response.getResultStr());
 	}
 	
@@ -42,7 +42,7 @@ public class HttpClientTest {
 		request.setUrl("http://localhost:8089/user/download");
 		request.setFileName("download.json");;
 		request.setFilePath("C:\\Users\\Administrator/Desktop/upload/");
-		HttpResponse response = HttpClientHandler.getInstance().download(request);
+		HttpResponse response = HttpClientHelper.getInstance().download(request);
 		System.out.println(response.getResultStr());
 	}
 	

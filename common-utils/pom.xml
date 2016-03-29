@@ -1,146 +1,173 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>com.william</groupId>
-  <artifactId>common-utils</artifactId>
-  <version>0.0.1</version>
-  <name>common-utils</name>
-  <description>WilliamQin's common utils</description>
-  
-  <build>
-	<plugins>
-		<plugin>
-			<groupId>org.apache.maven.plugins</groupId>
-			<artifactId>maven-compiler-plugin</artifactId>
-			<version>3.0</version>
-			<configuration>
-				<source>1.8</source>
-				<target>1.8</target>
-			</configuration>
-		</plugin>
-	</plugins>
-  </build>
-  
-  <properties>
-  	<httpClient.version>4.3.6</httpClient.version>
-  	<junit.version>4.12</junit.version>
-  	<fastJson.version>1.2.5</fastJson.version>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <slf4j.version>1.7.6</slf4j.version>  
-    <logback.version>1.1.1</logback.version>
-    <servlet-api.version>3.1.0</servlet-api.version>
-    <spring.version>4.1.5.RELEASE</spring.version>
-    <servlet-api.version>3.1.0</servlet-api.version>
-  </properties>
-  
-  <dependencies>
-  
-  	<!-- common -->
-  	<dependency>
-	  <groupId>javatar</groupId>
-	  <artifactId>javatar</artifactId>
-  	  <version>2.5</version>
-	</dependency>
-  	<dependency>
-		<groupId>junit</groupId>
-		<artifactId>junit</artifactId>
-		<version>${junit.version}</version>
-		<scope>test</scope>
-	</dependency>
-	<dependency>
-		<groupId>com.alibaba</groupId>
-		<artifactId>fastjson</artifactId>
-		<version>${fastJson.version}</version>
-	</dependency>
-	
-	<!-- apache common -->
-	<dependency>
-	  <groupId>commons-io</groupId>
-	  <artifactId>commons-io</artifactId>
-	  <version>2.4</version>
-    </dependency>
-	
-	<dependency>
-		<groupId>javax.servlet</groupId>
-    	<artifactId>javax.servlet-api</artifactId>
-        <version>${servlet-api.version}</version>
-        <scope>provided</scope>
-    </dependency>
-    
-    <!-- radius tinyradius API -->
-	<dependency> 
-	  <groupId>org.radius</groupId>
-	  <artifactId>tiny-radius</artifactId>
-	  <version>1.0</version>
-	</dependency>
-	
-	<!-- httpClient -->
-  	<dependency>
-		<groupId>org.apache.httpcomponents</groupId>
-		<artifactId>httpclient</artifactId>
-		<version>${httpClient.version}</version>
-	</dependency>
-	<dependency>
-  		<groupId>org.apache.httpcomponents</groupId>
-  		<artifactId>httpmime</artifactId>
-  		<version>${httpClient.version}</version>
-	</dependency>
-	
-	<!-- logger -->
-	<!--******** logback and slf4j ******** -->  
-    <dependency>  
-        <groupId>ch.qos.logback</groupId>  
-        <artifactId>logback-core</artifactId>  
-        <version>${logback.version}</version>  
-    </dependency>  
-    <dependency>  
-        <groupId>ch.qos.logback</groupId>  
-        <artifactId>logback-classic</artifactId>  
-        <version>${logback.version}</version>  
-    </dependency>  
-  
-    <dependency>  
-        <groupId>ch.qos.logback</groupId>  
-        <artifactId>logback-access</artifactId>  
-        <version>${logback.version}</version>  
-    </dependency>  
-  
-    <dependency>  
-        <groupId>org.slf4j</groupId>  
-        <artifactId>slf4j-api</artifactId>  
-        <version>${slf4j.version}</version>  
-    </dependency>  
-  
-    <!--jul桥接 用来输出 Java Logging Framework (JUL) -->  
-    <dependency>  
-        <groupId>org.slf4j</groupId>  
-        <artifactId>jul-to-slf4j</artifactId>  
-        <version>${slf4j.version}</version>  
-    </dependency>  
-  
-    <!-- jcl桥接，用来输出 第三方Jakarta Commons Logging (JCL) -->  
-    <dependency>  
-        <groupId>org.slf4j</groupId>  
-        <artifactId>jcl-over-slf4j</artifactId>  
-        <version>${slf4j.version}</version>  
-    </dependency>    
-    <!-- log4j桥接，用来输出 JAR包中log4j Logging (log4j) -->  
-    <dependency>  
-        <groupId>org.slf4j</groupId>  
-        <artifactId>log4j-over-slf4j</artifactId>  
-        <version>${slf4j.version}</version>  
-    </dependency>
-	
-    <dependency>
-        <groupId>org.springframework</groupId>
-        <artifactId>spring-beans</artifactId>
-        <version>${spring.version}</version>
-        <exclusions>
-        	<exclusion>
-        		<artifactId>commons-logging</artifactId>
-        		<groupId>commons-logging</groupId>
-        	</exclusion>
-        </exclusions>
-    </dependency>
-  </dependencies>
-  
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.william</groupId>
+	<artifactId>common-utils</artifactId>
+	<version>0.0.1</version>
+	<name>common-utils</name>
+	<description>WilliamQin's common utils</description>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.0</version>
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<properties>
+		<httpClient.version>4.3.6</httpClient.version>
+		<junit.version>4.12</junit.version>
+		<fastJson.version>1.2.5</fastJson.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<slf4j.version>1.7.6</slf4j.version>
+		<logback.version>1.1.1</logback.version>
+		<servlet-api.version>3.1.0</servlet-api.version>
+		<spring.version>4.1.5.RELEASE</spring.version>
+		<servlet-api.version>3.1.0</servlet-api.version>
+	</properties>
+
+	<dependencies>
+
+		<!-- common -->
+		<dependency>
+			<groupId>javatar</groupId>
+			<artifactId>javatar</artifactId>
+			<version>2.5</version>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>fastjson</artifactId>
+			<version>${fastJson.version}</version>
+		</dependency>
+
+		<!-- apache common -->
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.4</version>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+			<version>${servlet-api.version}</version>
+			<scope>provided</scope>
+		</dependency>
+
+		<!-- radius tinyradius API -->
+		<dependency>
+			<groupId>org.radius</groupId>
+			<artifactId>tiny-radius</artifactId>
+			<version>1.0</version>
+		</dependency>
+
+		<!-- httpClient -->
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>${httpClient.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpmime</artifactId>
+			<version>${httpClient.version}</version>
+		</dependency>
+
+		<!-- logger -->
+		<!--******** logback and slf4j ******** -->
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-core</artifactId>
+			<version>${logback.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>${logback.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-access</artifactId>
+			<version>${logback.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+
+		<!--jul桥接 用来输出 Java Logging Framework (JUL) -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jul-to-slf4j</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+
+		<!-- jcl桥接，用来输出 第三方Jakarta Commons Logging (JCL) -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jcl-over-slf4j</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+		<!-- log4j桥接，用来输出 JAR包中log4j Logging (log4j) -->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>log4j-over-slf4j</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-beans</artifactId>
+			<version>${spring.version}</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>commons-logging</artifactId>
+					<groupId>commons-logging</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<!-- 七牛云存储 -->
+		<dependency>
+			<groupId>com.qiniu</groupId>
+			<artifactId>qiniu-java-sdk</artifactId>
+			<version>[7.0.0, 7.0.99]</version>
+		</dependency>
+
+		<!-- kafka -->
+		<dependency>
+			<groupId>org.apache.kafka</groupId>
+			<artifactId>kafka_2.10</artifactId>
+			<version>0.8.2.1</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>slf4j-log4j12</artifactId>
+					<groupId>org.slf4j</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.kafka</groupId>
+			<artifactId>kafka-clients</artifactId>
+			<version>0.8.2.1</version>
+		</dependency>
+	</dependencies>
+
 </project>

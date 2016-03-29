@@ -38,7 +38,7 @@ import org.apache.http.util.EntityUtils;
  * @version 2.0
  * @since JDK 1.6
  */
-public class HttpClientHandler {
+public class HttpClientHelper {
 	
 	private static String DEFAULT_CHARSET = "UTF-8";
 	
@@ -54,27 +54,27 @@ public class HttpClientHandler {
 	
 	private PoolingHttpClientConnectionManager clientConnectionManager = new PoolingHttpClientConnectionManager();
 
-	private static HttpClientHandler httpClientHandler;
+	private static HttpClientHelper httpClientHandler;
 
 	//Get the instance by default config
-	public static HttpClientHandler getInstance() {
+	public static HttpClientHelper getInstance() {
 		if(httpClientHandler == null)
-			httpClientHandler = new HttpClientHandler();
+			httpClientHandler = new HttpClientHelper();
 		return httpClientHandler;
 	}
 	//Get the instance by config
-	public static HttpClientHandler getInstance(Integer defaultMaxConnPerHost, Integer defaultMaxTotalConn) {
+	public static HttpClientHelper getInstance(Integer defaultMaxConnPerHost, Integer defaultMaxTotalConn) {
 		if(httpClientHandler == null){
-			httpClientHandler = new HttpClientHandler(defaultMaxConnPerHost, defaultMaxTotalConn);
+			httpClientHandler = new HttpClientHelper(defaultMaxConnPerHost, defaultMaxTotalConn);
 		}
 		return httpClientHandler;
 	}
 	
-	private HttpClientHandler() {
+	private HttpClientHelper() {
 		this.setConnectionManager();
 	}
 	
-	private HttpClientHandler(Integer defaultMaxConnPerHost, Integer defaultMaxTotalConn){
+	private HttpClientHelper(Integer defaultMaxConnPerHost, Integer defaultMaxTotalConn){
 		if(defaultMaxConnPerHost != null)
 			this.defaultMaxConnPerHost = defaultMaxConnPerHost;
 		if(defaultMaxTotalConn != null)
