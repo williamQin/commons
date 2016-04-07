@@ -11,7 +11,7 @@ import org.tinyradius.util.RadiusClient;
 /**
  * @Desc 对接radius服务器的工具类
  * @author Administrator
- *
+ * @URL https://github.com/williamQin/TinyRadius.git
  */
 public class RadiusUtil {
 

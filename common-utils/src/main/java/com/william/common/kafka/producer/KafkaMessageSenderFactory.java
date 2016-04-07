@@ -1,6 +1,9 @@
 package com.william.common.kafka.producer;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
+import java.util.stream.Stream;
 
 import kafka.javaapi.producer.Producer;
 import kafka.producer.ProducerConfig;
@@ -26,6 +29,15 @@ public class KafkaMessageSenderFactory implements MessageSenderFactory{
 		
 		Producer<String, byte[]> producer = new Producer<String, byte[]>(config);
 		return new KafkaMessageSender(producer);
+		
 	}
+	
+	public void test(){
+		List<Integer> integers = new ArrayList<Integer>();
+		Stream<Integer> parallelStream = integers.parallelStream();
+		parallelStream.filter(t -> t.intValue() > 10).sorted();
+	}
+	
+	
 
 }

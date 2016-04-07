@@ -11,7 +11,7 @@ public class SimpleProducer {
 	public static void main(String[] args) {
 		
 		Properties properties = new Properties();
-		properties.put("zk.connect", "127.0.0.1:2181");
+		properties.put("zk.connect", "10.40.100.27:2222");
 		properties.put("serializer.class", "kafka.serializer.StringEncoder");
 		
 		ProducerConfig config = new ProducerConfig(properties);
