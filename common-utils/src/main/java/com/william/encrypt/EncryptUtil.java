@@ -2,7 +2,7 @@ package com.william.encrypt;
 
 import java.security.MessageDigest;
 
-import com.william.common.StrUtil;
+import com.william.common.utils.StrUtil;
 
 public class EncryptUtil {
 	
