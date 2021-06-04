@@ -22,7 +22,7 @@
 	</build>
 
 	<properties>
-		<httpClient.version>4.3.6</httpClient.version>
+		<httpClient.version>4.5.13</httpClient.version>
 		<junit.version>4.12</junit.version>
 		<fastJson.version>1.2.58</fastJson.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
